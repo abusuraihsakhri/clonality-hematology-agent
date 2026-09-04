@@ -63,3 +63,11 @@ def test_supervisor_consensus_and_audit():
     assert main(["audit", "--task-id", "CLI-TEST-01"]) == 0
     assert main(["chat", "Explain", "specifications"]) == 0
     assert main(["verify-audit"]) == 0
+
+    # CLI batch test
+    test_out = "tests_out_smoke.csv"
+    assert main(["batch", "-i", "sample.csv", "-o", test_out]) == 0
+    test_out_path = Path(test_out)
+    assert test_out_path.exists()
+    assert test_out_path.stat().st_size > 0
+    test_out_path.unlink(missing_ok=True)

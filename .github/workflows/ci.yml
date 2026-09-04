@@ -28,7 +28,13 @@ jobs:
 
     - name: Run Pytest Suite
       run: |
-        pytest -v
+        python -m pytest -p no:zarr -v
+
+    - name: CLI Batch Smoke Test
+      run: |
+        python cli.py batch -i sample.csv -o out_smoke.csv
+        test -s out_smoke.csv
+        rm -f out_smoke.csv
 
     - name: Security SAST & Zero-PHI Audit
       run: |

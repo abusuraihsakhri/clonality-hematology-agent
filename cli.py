@@ -88,13 +88,22 @@ def main(argv=None):
         out_fields = fieldnames + ["overall_urgency", "integrity_status", "total_alerts", "audit_hash"]
         out_rows = []
         for r in rows:
+            primary_val = float(r.get("primary_metric", r.get("metric_primary", 15.0)))
+            secondary_val = float(r.get("secondary_metric", r.get("metric_secondary", 5.0)))
+            status_val = r.get("status_descriptor", r.get("status_flag", r.get("status_text", "NOMINAL")))
+            crit_val = r.get("is_critical_flag", r.get("is_stat", r.get("critical_flag", False)))
+            if isinstance(crit_val, str):
+                crit_val = crit_val.strip().lower() in ("true", "1", "yes", "t")
+            else:
+                crit_val = bool(crit_val)
+
             payload = SystemTaskPayload(
-                task_id=r.get("task_id", "TASK-01"),
-                target_identifier=r.get("target_identifier", "TARGET-01"),
-                primary_metric=float(r.get("primary_metric", 15.0)),
-                secondary_metric=float(r.get("secondary_metric", 5.0)),
-                status_descriptor=r.get("status_descriptor", "NOMINAL"),
-                is_critical_flag=bool(r.get("is_critical_flag", False)),
+                task_id=r.get("task_id", r.get("case_id", "TASK-01")),
+                target_identifier=r.get("target_identifier", r.get("patient_synthetic_id", "TARGET-01")),
+                primary_metric=primary_val,
+                secondary_metric=secondary_val,
+                status_descriptor=status_val,
+                is_critical_flag=crit_val,
             )
             dossier = supervisor.process_task(payload)
             row_dict = dict(r)
