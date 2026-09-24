@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Browser-based clonality hematology demonstration rule review.">
+  <title>Clonality Hematology Rule Review</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Research utility</p>
+        <h1>Clonality Hematology Rule Review</h1>
+        <p class="subtitle">Deterministic compatibility rules running locally in your browser with Python.</p>
+      </div>
+      <button id="theme-toggle" class="icon-button" type="button" aria-label="Toggle color theme">◐</button>
+    </header>
+
+    <section class="notice" aria-label="Clinical-use notice">
+      <strong>Demonstration only.</strong>
+      The numeric thresholds are project defaults, not validated EuroClonality/BIOMED-2 diagnostic cutoffs.
+    </section>
+
+    <div class="workspace">
+      <section class="panel input-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="section-kicker">Inputs</p>
+            <h2>Review one record</h2>
+          </div>
+          <button id="example-button" class="secondary-button" type="button">Example</button>
+        </div>
+
+        <form id="review-form">
+          <div class="field-grid">
+            <label>
+              <span>Case ID</span>
+              <input id="case-id" name="case_id" value="CASE-001" maxlength="128" required>
+            </label>
+            <label>
+              <span>Status descriptor</span>
+              <input id="status-flag" name="status_flag" value="NORMAL" maxlength="256" required>
+            </label>
+            <label>
+              <span>Primary metric</span>
+              <input id="primary-metric" name="primary_metric" type="number" step="any" value="15" required>
+            </label>
+            <label>
+              <span>Secondary metric</span>
+              <input id="secondary-metric" name="secondary_metric" type="number" step="any" value="5" required>
+            </label>
+          </div>
+
+          <label class="check-row">
+            <input id="is-stat" name="is_stat" type="checkbox">
+            <span>Explicit priority / STAT flag</span>
+          </label>
+
+          <button id="analyze-button" class="primary-button" type="submit" disabled>Analyze</button>
+        </form>
+
+        <p id="runtime-status" class="runtime-status" role="status" aria-live="polite">
+          Loading Python runtime…
+        </p>
+      </section>
+
+      <section class="panel result-panel" aria-live="polite">
+        <div class="panel-heading">
+          <div>
+            <p class="section-kicker">Result</p>
+            <h2>Rule review</h2>
+          </div>
+          <span id="result-badge" class="badge neutral">Ready</span>
+        </div>
+
+        <div id="empty-state" class="empty-state">
+          Enter values and select <strong>Analyze</strong>. Data stays in this page; the app does not send case inputs to a server.
+        </div>
+
+        <div id="result-content" class="result-content" hidden>
+          <div class="metric-row">
+            <div><span>Status</span><strong id="overall-status">—</strong></div>
+            <div><span>Alerts</span><strong id="alert-count">0</strong></div>
+            <div><span>Case</span><strong id="result-case">—</strong></div>
+          </div>
+          <div id="alerts" class="alerts"></div>
+          <p id="reference-note" class="reference-note"></p>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <span>Python runs client-side via Pyodide 314.0.7.</span>
+      <a href="https://github.com/abusuraihsakhri/clonality-hematology-agent">Source repository</a>
+    </footer>
+  </main>
+</body>
+</html>
