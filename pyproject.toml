@@ -1,27 +1,39 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "clonality-hematology-engine"
-version = "2.0.0"
-description = "ClonoMind: IGH & TCR Gene Rearrangement Clonality Distributed Component Classifier"
+version = "2.1.0"
+description = "Rule-based research utility for reviewing clonality-assay metadata and workflow flags."
 readme = "README.md"
-authors = [{ name = "Dr. Abu Suraih Sakhri", email = "abusuraih@example.com" }]
-license = { text = "MIT" }
+authors = [{ name = "Abu Suraih Sakhri" }]
+license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Medical Science Apps.",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = []
+
+[project.optional-dependencies]
+server = [
+    "fastapi>=0.115,<1",
+    "pydantic>=2.7,<3",
+    "uvicorn>=0.30,<1",
+]
+dev = [
+    "pytest>=9.0.3,<10",
+    "pip-audit>=2.7,<3",
+]
 
 [project.scripts]
 clonality-hematology-engine = "clonality_hematology_agent.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/abusuraihsakhri/clonality-hematology-engine"
-Repository = "https://github.com/abusuraihsakhri/clonality-hematology-engine.git"
+Homepage = "https://github.com/abusuraihsakhri/clonality-hematology-agent"
+Repository = "https://github.com/abusuraihsakhri/clonality-hematology-agent.git"
+
+[tool.setuptools.packages.find]
+include = ["clonality_hematology_agent*"]

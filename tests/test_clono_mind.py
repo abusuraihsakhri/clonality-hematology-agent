@@ -1,29 +1,29 @@
-import pytest
-from clono_mind import PeakRatioCalculatorAgent, PolyClonalityFilterAgent, BMRDMarkerFinderAgent, ClonoCoordinator, main
+from clono_mind import (
+    BMRDMarkerFinderAgent,
+    ClonoCoordinator,
+    DomainKnowledgeRegistry,
+    PeakRatioCalculatorAgent,
+    PolyClonalityFilterAgent,
+    main,
+)
 
 
 def test_sub_agents():
-    a1 = PeakRatioCalculatorAgent()
-    alerts1 = a1.evaluate({"metric_primary": 35.0})
-    assert len(alerts1) == 1
-
-    a2 = PolyClonalityFilterAgent()
-    alerts2 = a2.evaluate({"critical_flag": True})
-    assert len(alerts2) == 1
-
-    a3 = BMRDMarkerFinderAgent()
-    alerts3 = a3.evaluate({"status_text": "DISCORDANT_FINDING"})
-    assert len(alerts3) == 1
+    assert len(PeakRatioCalculatorAgent().evaluate({"metric_primary": 35.0})) == 1
+    assert len(PolyClonalityFilterAgent().evaluate({"critical_flag": True})) == 1
+    assert len(BMRDMarkerFinderAgent().evaluate({"status_text": "DISCORDANT_FINDING"})) == 1
 
 
 def test_coordinator():
     coord = ClonoCoordinator()
-    dossier = coord.audit_case({"case_id": "TEST-100", "metric_primary": 10.0, "metric_secondary": 2.0})
+    dossier = coord.audit_case(
+        {"case_id": "TEST-100", "metric_primary": 10.0, "metric_secondary": 2.0}
+    )
     assert dossier["overall_status"] == "CONCORDANT_NORMAL"
     assert dossier["total_alerts"] == 0
 
-    ans = coord.query_assistant("What are the guidelines?")
-    assert "guidelines" in ans or "standards" in ans
+    answer = coord.query_assistant("What are the guidelines?")
+    assert "pattern-based" in answer.lower()
 
 
 def test_cli():
@@ -31,7 +31,6 @@ def test_cli():
     assert main(["chat", "What", "is", "the", "system", "status?"]) == 0
 
 
-def test_domain_registry():
-    from clono_mind import DomainKnowledgeRegistry
-    assert DomainKnowledgeRegistry.ZERO_PHI_COMPLIANCE is True
-    assert "PRO" in DomainKnowledgeRegistry.SYSTEM_VERSION
+def test_domain_registry_does_not_claim_compliance():
+    assert DomainKnowledgeRegistry.ZERO_PHI_COMPLIANCE is False
+    assert DomainKnowledgeRegistry.HIPAA_SAFE_HARBOR == "NOT_CLAIMED"

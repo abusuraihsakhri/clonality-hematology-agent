@@ -1,12 +1,9 @@
-"""
-Clinical Data Models & Enums for ClonoMind: IGH & TCR Gene Rearrangement Clonality Distributed Component Classifier.
-Domain: Hematopathology
-Standard: WHO 5th Edition / ICC Hematolymphoid 2022
-"""
+"""Data models for the clonality hematology research utility."""
+
 import datetime
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict
 
 
 class UrgencyLevel(str, Enum):
@@ -43,7 +40,7 @@ class AgentAlert:
     title: str
     clinical_finding: str
     actionable_recommendation: str
-    guideline_citation: str = "WHO 5th Edition / ICC Hematolymphoid 2022"
+    guideline_citation: str = "Demonstration rule only; not a guideline-derived diagnostic threshold."
     timestamp: str = field(default_factory=lambda: datetime.datetime.now(datetime.timezone.utc).isoformat())
 
     def to_dict(self) -> Dict[str, Any]:
