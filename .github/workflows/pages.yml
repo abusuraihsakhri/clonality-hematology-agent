@@ -52,3 +52,18 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v5
+
+      - name: Verify live site
+        env:
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --retry 6 --retry-delay 2 "${SITE_URL}" -o /tmp/index.html
+          grep -q 'id="analyze-button"' /tmp/index.html
+          grep -q 'Clonality Hematology Rule Review' /tmp/index.html
+          curl --fail --silent --show-error --retry 6 --retry-delay 2 "${SITE_URL}styles.css" -o /tmp/styles.css
+          curl --fail --silent --show-error --retry 6 --retry-delay 2 "${SITE_URL}app.js" -o /tmp/app.js
+          curl --fail --silent --show-error --retry 6 --retry-delay 2 "${SITE_URL}clonality_hematology_agent/agents.py" -o /tmp/agents.py
+          grep -q 'loadPyodide' /tmp/app.js
+          grep -q 'class ClonoCoordinator' /tmp/agents.py
+          curl --fail --silent --show-error --head --retry 3 "https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.js" >/dev/null

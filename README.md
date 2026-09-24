@@ -1,5 +1,7 @@
 # Clonality Hematology Agent
 
+### [Open the Live Application →](https://abusuraihsakhri.github.io/clonality-hematology-agent/)
+
 A small Python research utility for deterministic review rules around clonality-assay metadata and workflow flags.
 
 The current numeric thresholds are **compatibility defaults from the original project**. They are not validated EuroClonality/BIOMED-2 diagnostic cutoffs, and this repository should not be used to diagnose clonality or direct patient care. EuroClonality guidance emphasizes pattern-based interpretation, reproducibility, assay validation, and integration with morphologic, immunophenotypic, and clinical findings rather than fixed quantitative cutoffs.
@@ -37,7 +39,7 @@ The legacy `cli.py` and `clono_mind.py` entry points remain for compatibility, b
 
 The `web/` interface loads Pyodide and executes the package's Python rule engine in the browser. Case inputs are not submitted to an application server. The browser still downloads the Pyodide runtime from jsDelivr on first load.
 
-GitHub Pages deployment is automated through `.github/workflows/pages.yml`. The verified live URL is added here after deployment is confirmed.
+GitHub Pages deployment is automated through `.github/workflows/pages.yml` and includes a post-deployment HTTP smoke check of the page and required assets.
 
 ## Security and data handling
 
